@@ -1,0 +1,638 @@
+{
+ "Resources": {
+  "RoomsTableA5C1D45B": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "roomId",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "roomId",
+      "KeyType": "HASH"
+     }
+    ],
+    "TableName": "rooms"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "MinoruStack/RoomsTable/Resource"
+   }
+  },
+  "TasksTable88911DC5": {
+   "Type": "AWS::DynamoDB::Table",
+   "Properties": {
+    "AttributeDefinitions": [
+     {
+      "AttributeName": "roomId",
+      "AttributeType": "S"
+     },
+     {
+      "AttributeName": "taskId",
+      "AttributeType": "S"
+     }
+    ],
+    "BillingMode": "PAY_PER_REQUEST",
+    "KeySchema": [
+     {
+      "AttributeName": "roomId",
+      "KeyType": "HASH"
+     },
+     {
+      "AttributeName": "taskId",
+      "KeyType": "RANGE"
+     }
+    ],
+    "TableName": "tasks"
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "MinoruStack/TasksTable/Resource"
+   }
+  },
+  "RoomHandlerServiceRole1ABC2E17": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "MinoruStack/RoomHandler/ServiceRole/Resource"
+   }
+  },
+  "RoomHandlerServiceRoleDefaultPolicy6585A656": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:Query",
+        "dynamodb:GetItem",
+        "dynamodb:Scan",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "RoomsTableA5C1D45B",
+          "Arn"
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "RoomsTableA5C1D45B",
+          "Arn"
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "RoomHandlerServiceRoleDefaultPolicy6585A656",
+    "Roles": [
+     {
+      "Ref": "RoomHandlerServiceRole1ABC2E17"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "MinoruStack/RoomHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "RoomHandlerCF7B6EB0": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Architectures": [
+     "arm64"
+    ],
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-359554936283-ap-northeast-1",
+     "S3Key": "dbd7959e3abb97721dfe7f2ae14a4fc2849228b919d3cfdfbfc529026a06d193.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "ROOMS_TABLE": {
+       "Ref": "RoomsTableA5C1D45B"
+      }
+     }
+    },
+    "FunctionName": "room-handler",
+    "Handler": "bootstrap",
+    "Role": {
+     "Fn::GetAtt": [
+      "RoomHandlerServiceRole1ABC2E17",
+      "Arn"
+     ]
+    },
+    "Runtime": "provided.al2023"
+   },
+   "DependsOn": [
+    "RoomHandlerServiceRoleDefaultPolicy6585A656",
+    "RoomHandlerServiceRole1ABC2E17"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "MinoruStack/RoomHandler/Resource",
+    "aws:asset:path": "asset.dbd7959e3abb97721dfe7f2ae14a4fc2849228b919d3cfdfbfc529026a06d193",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "TaskHandlerServiceRole4B48C24D": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "MinoruStack/TaskHandler/ServiceRole/Resource"
+   }
+  },
+  "TaskHandlerServiceRoleDefaultPolicy6A78693C": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:Query",
+        "dynamodb:GetItem",
+        "dynamodb:Scan",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DescribeTable"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "RoomsTableA5C1D45B",
+          "Arn"
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "RoomsTableA5C1D45B",
+          "Arn"
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:Query",
+        "dynamodb:GetItem",
+        "dynamodb:Scan",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:DescribeTable"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "TasksTable88911DC5",
+          "Arn"
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "TasksTable88911DC5",
+          "Arn"
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "TaskHandlerServiceRoleDefaultPolicy6A78693C",
+    "Roles": [
+     {
+      "Ref": "TaskHandlerServiceRole4B48C24D"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "MinoruStack/TaskHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "TaskHandlerE5C6B6D2": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Architectures": [
+     "arm64"
+    ],
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-359554936283-ap-northeast-1",
+     "S3Key": "dbd7959e3abb97721dfe7f2ae14a4fc2849228b919d3cfdfbfc529026a06d193.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "ROOMS_TABLE": {
+       "Ref": "RoomsTableA5C1D45B"
+      },
+      "TASKS_TABLE": {
+       "Ref": "TasksTable88911DC5"
+      }
+     }
+    },
+    "FunctionName": "task-handler",
+    "Handler": "bootstrap",
+    "Role": {
+     "Fn::GetAtt": [
+      "TaskHandlerServiceRole4B48C24D",
+      "Arn"
+     ]
+    },
+    "Runtime": "provided.al2023"
+   },
+   "DependsOn": [
+    "TaskHandlerServiceRoleDefaultPolicy6A78693C",
+    "TaskHandlerServiceRole4B48C24D"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "MinoruStack/TaskHandler/Resource",
+    "aws:asset:path": "asset.dbd7959e3abb97721dfe7f2ae14a4fc2849228b919d3cfdfbfc529026a06d193",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "MinoruApiD773BF9E": {
+   "Type": "AWS::ApiGatewayV2::Api",
+   "Properties": {
+    "CorsConfiguration": {
+     "AllowHeaders": [
+      "Content-Type",
+      "Authorization"
+     ],
+     "AllowMethods": [
+      "*"
+     ],
+     "AllowOrigins": [
+      "*"
+     ]
+    },
+    "Name": "minoru-api",
+    "ProtocolType": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "MinoruStack/MinoruApi/Resource"
+   }
+  },
+  "MinoruApiDefaultStage3279DADF": {
+   "Type": "AWS::ApiGatewayV2::Stage",
+   "Properties": {
+    "ApiId": {
+     "Ref": "MinoruApiD773BF9E"
+    },
+    "AutoDeploy": true,
+    "StageName": "$default"
+   },
+   "Metadata": {
+    "aws:cdk:path": "MinoruStack/MinoruApi/DefaultStage/Resource"
+   }
+  },
+  "MinoruApiANYroomsroomIdtasksproxyTaskIntegration06DF8956": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "MinoruApiD773BF9E"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "TaskHandlerE5C6B6D2",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "MinoruStack/MinoruApi/ANY--rooms--{roomId}--tasks--{proxy+}/TaskIntegration/Resource"
+   }
+  },
+  "MinoruApiANYroomsroomIdtasksproxyTaskIntegrationPermissionA71472BA": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TaskHandlerE5C6B6D2",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:359554936283:",
+       {
+        "Ref": "MinoruApiD773BF9E"
+       },
+       "/*/*/rooms/{roomId}/tasks/{proxy+}"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "MinoruStack/MinoruApi/ANY--rooms--{roomId}--tasks--{proxy+}/TaskIntegration-Permission"
+   }
+  },
+  "MinoruApiANYroomsroomIdtasksproxyD40EC447": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "MinoruApiD773BF9E"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /rooms/{roomId}/tasks/{proxy+}",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "MinoruApiANYroomsroomIdtasksproxyTaskIntegration06DF8956"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "MinoruStack/MinoruApi/ANY--rooms--{roomId}--tasks--{proxy+}/Resource"
+   }
+  },
+  "MinoruApiANYroomsroomIdtasksTaskIntegrationPermission73C2FB3C": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "TaskHandlerE5C6B6D2",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:359554936283:",
+       {
+        "Ref": "MinoruApiD773BF9E"
+       },
+       "/*/*/rooms/{roomId}/tasks"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "MinoruStack/MinoruApi/ANY--rooms--{roomId}--tasks/TaskIntegration-Permission"
+   }
+  },
+  "MinoruApiANYroomsroomIdtasks2FC9BD6E": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "MinoruApiD773BF9E"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /rooms/{roomId}/tasks",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "MinoruApiANYroomsroomIdtasksproxyTaskIntegration06DF8956"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "MinoruStack/MinoruApi/ANY--rooms--{roomId}--tasks/Resource"
+   }
+  },
+  "MinoruApiANYroomsproxyRoomIntegration1492FAAA": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "MinoruApiD773BF9E"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "RoomHandlerCF7B6EB0",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "MinoruStack/MinoruApi/ANY--rooms--{proxy+}/RoomIntegration/Resource"
+   }
+  },
+  "MinoruApiANYroomsproxyRoomIntegrationPermissionF203A59D": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "RoomHandlerCF7B6EB0",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:ap-northeast-1:359554936283:",
+       {
+        "Ref": "MinoruApiD773BF9E"
+       },
+       "/*/*/rooms/{proxy+}"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "MinoruStack/MinoruApi/ANY--rooms--{proxy+}/RoomIntegration-Permission"
+   }
+  },
+  "MinoruApiANYroomsproxy646F45B3": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "MinoruApiD773BF9E"
+    },
+    "AuthorizationType": "NONE",
+    "RouteKey": "ANY /rooms/{proxy+}",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "MinoruApiANYroomsproxyRoomIntegration1492FAAA"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "MinoruStack/MinoruApi/ANY--rooms--{proxy+}/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/12O0WrDMAxFv6Xvjhbc7QPawdieVtK9F8XxgprEDpHcEIz/fdhhMPZ0z5XuFdKgn1+gPuDKlemGaqQW4lXQDApXvsVuczj5roX4he1o1eu3K5DUiFPbIcS34IyQd3n1ly92mYiZvEuKcILY+L1f9OJHMlvJFUqKjzdktsJwyqL4COdgBitnZKtwph7Frrg9NMR3kfk0U65nyfYq2JfzO+RR44Ps9OHE9gv+vvbPllxKqrHsw2KsKg/kO+T6HPgMMgdJyvnOwp2fHlqDrqE+3JmoWoITmiw0u/4APW3DD1IBAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "MinoruStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "ApiEndpoint": {
+   "Description": "API Gateway endpoint URL",
+   "Value": {
+    "Fn::GetAtt": [
+     "MinoruApiD773BF9E",
+     "ApiEndpoint"
+    ]
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

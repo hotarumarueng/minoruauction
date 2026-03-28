@@ -1,0 +1,150 @@
+{
+  "/MinoruStack/RoomsTable": [
+    {
+      "type": "aws:cdk:hasPhysicalName",
+      "data": {
+        "Ref": "RoomsTableA5C1D45B"
+      }
+    }
+  ],
+  "/MinoruStack/TasksTable": [
+    {
+      "type": "aws:cdk:hasPhysicalName",
+      "data": {
+        "Ref": "TasksTable88911DC5"
+      }
+    }
+  ],
+  "/MinoruStack/ApiEndpoint": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ApiEndpoint"
+    }
+  ],
+  "/MinoruStack/BootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "BootstrapVersion"
+    }
+  ],
+  "/MinoruStack/CheckBootstrapVersion": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CheckBootstrapVersion"
+    }
+  ],
+  "/MinoruStack/RoomsTable/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "RoomsTableA5C1D45B"
+    }
+  ],
+  "/MinoruStack/TasksTable/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "TasksTable88911DC5"
+    }
+  ],
+  "/MinoruStack/RoomHandler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "RoomHandlerCF7B6EB0"
+    }
+  ],
+  "/MinoruStack/TaskHandler/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "TaskHandlerE5C6B6D2"
+    }
+  ],
+  "/MinoruStack/MinoruApi/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "MinoruApiD773BF9E"
+    }
+  ],
+  "/MinoruStack/CDKMetadata/Default": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "CDKMetadata"
+    }
+  ],
+  "/MinoruStack/RoomHandler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "RoomHandlerServiceRole1ABC2E17"
+    }
+  ],
+  "/MinoruStack/TaskHandler/ServiceRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "TaskHandlerServiceRole4B48C24D"
+    }
+  ],
+  "/MinoruStack/MinoruApi/DefaultStage/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "MinoruApiDefaultStage3279DADF"
+    }
+  ],
+  "/MinoruStack/MinoruApi/ANY--rooms--{roomId}--tasks--{proxy+}/TaskIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "MinoruApiANYroomsroomIdtasksproxyTaskIntegrationPermissionA71472BA"
+    }
+  ],
+  "/MinoruStack/MinoruApi/ANY--rooms--{roomId}--tasks--{proxy+}/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "MinoruApiANYroomsroomIdtasksproxyD40EC447"
+    }
+  ],
+  "/MinoruStack/MinoruApi/ANY--rooms--{roomId}--tasks/TaskIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "MinoruApiANYroomsroomIdtasksTaskIntegrationPermission73C2FB3C"
+    }
+  ],
+  "/MinoruStack/MinoruApi/ANY--rooms--{roomId}--tasks/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "MinoruApiANYroomsroomIdtasks2FC9BD6E"
+    }
+  ],
+  "/MinoruStack/MinoruApi/ANY--rooms--{proxy+}/RoomIntegration-Permission": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "MinoruApiANYroomsproxyRoomIntegrationPermissionF203A59D"
+    }
+  ],
+  "/MinoruStack/MinoruApi/ANY--rooms--{proxy+}/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "MinoruApiANYroomsproxy646F45B3"
+    }
+  ],
+  "/MinoruStack/RoomHandler/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "RoomHandlerServiceRoleDefaultPolicy6585A656"
+    }
+  ],
+  "/MinoruStack/TaskHandler/ServiceRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "TaskHandlerServiceRoleDefaultPolicy6A78693C"
+    }
+  ],
+  "/MinoruStack/MinoruApi/ANY--rooms--{roomId}--tasks--{proxy+}/TaskIntegration/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "MinoruApiANYroomsroomIdtasksproxyTaskIntegration06DF8956"
+    }
+  ],
+  "/MinoruStack/MinoruApi/ANY--rooms--{proxy+}/RoomIntegration/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "MinoruApiANYroomsproxyRoomIntegration1492FAAA"
+    }
+  ]
+}

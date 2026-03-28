@@ -1,0 +1,36 @@
+{
+  "version": "53.0.0",
+  "files": {
+    "dbd7959e3abb97721dfe7f2ae14a4fc2849228b919d3cfdfbfc529026a06d193": {
+      "displayName": "RoomHandler/Code",
+      "source": {
+        "path": "asset.dbd7959e3abb97721dfe7f2ae14a4fc2849228b919d3cfdfbfc529026a06d193",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "359554936283-ap-northeast-1-1ccc9c7f": {
+          "bucketName": "cdk-hnb659fds-assets-359554936283-ap-northeast-1",
+          "objectKey": "dbd7959e3abb97721dfe7f2ae14a4fc2849228b919d3cfdfbfc529026a06d193.zip",
+          "region": "ap-northeast-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::359554936283:role/cdk-hnb659fds-file-publishing-role-359554936283-ap-northeast-1"
+        }
+      }
+    },
+    "e03d51cded5db6691f58427380ba3444818eef0bb23dc064aeaad527c08c0f1e": {
+      "displayName": "MinoruStack Template",
+      "source": {
+        "path": "MinoruStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "359554936283-ap-northeast-1-f5dbce48": {
+          "bucketName": "cdk-hnb659fds-assets-359554936283-ap-northeast-1",
+          "objectKey": "e03d51cded5db6691f58427380ba3444818eef0bb23dc064aeaad527c08c0f1e.json",
+          "region": "ap-northeast-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::359554936283:role/cdk-hnb659fds-file-publishing-role-359554936283-ap-northeast-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}
