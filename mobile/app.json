@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "minoru",
+    "slug": "minoru",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "minoru",
+    "platforms": ["ios", "android"],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.toriumihotaru.minoru"
+    },
+    "android": {
+      "package": "com.toriumihotaru.minoru",
+      "adaptiveIcon": {
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "extra": {
+      "apiBaseUrl": "http://localhost:3000"
+    }
+  }
+}
