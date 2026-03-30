@@ -1,5 +1,5 @@
 import * as cdk from "aws-cdk-lib";
-import { Template } from "aws-cdk-lib/assertions";
+import { Template, Match } from "aws-cdk-lib/assertions";
 import { MinoruStack } from "../lib/minoru-stack";
 
 describe("MinoruStack", () => {
@@ -55,6 +55,36 @@ describe("MinoruStack", () => {
         Runtime: "provided.al2023",
         Architectures: ["arm64"],
         Handler: "bootstrap",
+      });
+    });
+  });
+
+  describe("プッシュ通知インフラ", () => {
+    it("Secrets Manager リソースが存在しない（無料枠 - SSM Parameter Store を使用）", () => {
+      template.resourceCountIs("AWS::SecretsManager::Secret", 0);
+    });
+
+    it("TaskHandler に SNS Publish 権限がある", () => {
+      template.hasResourceProperties("AWS::IAM::Policy", {
+        PolicyDocument: {
+          Statement: Match.arrayWith([
+            Match.objectLike({
+              Action: ["sns:CreatePlatformEndpoint", "sns:Publish"],
+              Effect: "Allow",
+            }),
+          ]),
+        },
+      });
+    });
+
+    it("TaskHandler に SNS_FCM_PLATFORM_APP_ARN 環境変数が設定されている", () => {
+      template.hasResourceProperties("AWS::Lambda::Function", {
+        FunctionName: "task-handler",
+        Environment: {
+          Variables: {
+            SNS_FCM_PLATFORM_APP_ARN: {},
+          },
+        },
       });
     });
   });

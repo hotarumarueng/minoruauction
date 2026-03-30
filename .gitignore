@@ -27,3 +27,10 @@ npm-debug.log*
 # CDK
 cdk.out/
 *.js.map
+
+# Lambda build artifacts (rebuild with: cd backend && make build)
+infra/lambda-assets/
+
+# Go coverage
+*.coverprofile
+coverage/

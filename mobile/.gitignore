@@ -1,0 +1,8 @@
+node_modules/
+.expo/
+dist/
+web-build/
+
+# 環境変数（APIエンドポイント等）
+.env
+.env.local

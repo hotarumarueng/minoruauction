@@ -5,7 +5,10 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "minoru",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.toriumihotaru.minoru"
@@ -18,6 +21,9 @@
     },
     "extra": {
       "apiBaseUrl": "http://localhost:3000"
-    }
+    },
+    "plugins": [
+      "expo-asset"
+    ]
   }
 }

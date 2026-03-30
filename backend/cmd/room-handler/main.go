@@ -2,20 +2,25 @@ package main
 
 import (
 	"context"
+	"log/slog"
+	"os"
 
-	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/toriumihotaru/minoru/internal/db"
-	"github.com/toriumihotaru/minoru/internal/response"
+	"github.com/toriumihotaru/minoru/internal/room"
 )
 
-var ddb = db.NewDynamoDBClient(context.Background())
+var h *room.Handler
 
-func handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	_ = ddb // タスク 2.x で実装予定
-	return response.ToAPIGatewayErrorResponse(501, "notImplemented", "未実装"), nil
+func init() {
+	// CloudWatch Logs で検索・フィルタリングできるよう JSON 形式で出力する
+	slog.SetDefault(slog.New(slog.NewJSONHandler(os.Stdout, nil)))
+
+	ddb := db.NewDynamoDBClient(context.Background())
+	store := room.NewDynamoStore(ddb)
+	h = room.NewHandler(store)
 }
 
 func main() {
-	lambda.Start(handler)
+	lambda.Start(h.Handle)
 }
