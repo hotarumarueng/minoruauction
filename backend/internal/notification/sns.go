@@ -60,21 +60,30 @@ func (n *SNSNotifier) Notify(ctx context.Context, role, deviceToken, roomID, tas
 }
 
 // buildMessage は SNS MessageStructure=json 形式のメッセージを生成する。
-// FCM v1 HTTP API 形式に準拠する。
+// SNS は各プラットフォームキー（"GCM"）の値を JSON 文字列として受け取るため、
+// 内側の GCM ペイロードを先に json.Marshal してから文字列として埋め込む（二重エンコード）。
 func buildMessage(roomID, taskID string) (string, error) {
-	payload := map[string]interface{}{
-		"GCM": map[string]interface{}{
-			"notification": map[string]string{
-				"title": "入札代行アプリ",
-				"body":  "ステータスが更新されました",
-			},
-			"data": map[string]string{
-				"roomId": roomID,
-				"taskId": taskID,
-			},
+	// Step1: GCM ペイロードを JSON 文字列にシリアライズ
+	gcmPayload := map[string]interface{}{
+		"notification": map[string]string{
+			"title": "入札代行アプリ",
+			"body":  "ステータスが更新されました",
+		},
+		"data": map[string]string{
+			"roomId": roomID,
+			"taskId": taskID,
 		},
 	}
-	b, err := json.Marshal(payload)
+	gcmBytes, err := json.Marshal(gcmPayload)
+	if err != nil {
+		return "", err
+	}
+
+	// Step2: 外側マップでは GCM の値を文字列として持つ（SNS が要求する形式）
+	outer := map[string]string{
+		"GCM": string(gcmBytes),
+	}
+	b, err := json.Marshal(outer)
 	if err != nil {
 		return "", err
 	}
