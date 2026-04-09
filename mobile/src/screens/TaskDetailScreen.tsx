@@ -11,9 +11,11 @@ import {
   Linking,
   Share,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigation";
 import type { Task } from "../types";
+import { PRIMARY } from "../constants/theme";
 import { getTasks, updateTaskStatus, updateTaskAmount, deleteTask } from "../api/task";
 
 type Props = NativeStackScreenProps<RootStackParamList, "TaskDetail">;
@@ -117,7 +119,7 @@ export function TaskDetailScreen({ route, navigation }: Props) {
   }
 
   if (loading) {
-    return <ActivityIndicator style={styles.loader} size="large" color="#007AFF" />;
+    return <ActivityIndicator style={styles.loader} size="large" color={PRIMARY} />;
   }
   if (!task) {
     return (
@@ -128,6 +130,7 @@ export function TaskDetailScreen({ route, navigation }: Props) {
   }
 
   return (
+    <SafeAreaView style={styles.safeArea}>
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       {/* ─── ヤフオクURL ＋ 共有 ─── */}
       <View style={styles.linkRow}>
@@ -271,13 +274,14 @@ export function TaskDetailScreen({ route, navigation }: Props) {
         </TouchableOpacity>
       )}
     </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: { flex: 1, backgroundColor: "#fff" },
   container: {
     flex: 1,
-    backgroundColor: "#fff",
   },
   content: {
     padding: 24,
@@ -298,7 +302,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   link: {
-    color: "#007AFF",
+    color: PRIMARY,
     fontSize: 15,
     textDecorationLine: "underline",
   },
@@ -331,7 +335,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   bidButton: {
-    backgroundColor: "#007AFF",
+    backgroundColor: PRIMARY,
     borderRadius: 14,
     paddingVertical: 20,
     alignItems: "center",
@@ -398,14 +402,14 @@ const styles = StyleSheet.create({
   amountInput: {
     flex: 1,
     borderWidth: 1,
-    borderColor: "#007AFF",
+    borderColor: PRIMARY,
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 18,
   },
   amountConfirmButton: {
-    backgroundColor: "#007AFF",
+    backgroundColor: PRIMARY,
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 10,
@@ -424,7 +428,7 @@ const styles = StyleSheet.create({
   },
   amountButton: {
     marginTop: 12,
-    backgroundColor: "#007AFF",
+    backgroundColor: PRIMARY,
     borderRadius: 10,
     paddingVertical: 12,
     alignItems: "center",

@@ -3,18 +3,17 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
-  Text,
   Platform,
   Animated,
   Dimensions,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
+import { PRIMARY, SECONDARY, BG } from "../constants/theme";
 
-const PRIMARY = "#4ECDC4";
-const SECONDARY = "#FF6B6B";
 const INACTIVE = "#B2BEC3";
 const BAR_BG = "#FFFFFF";
-const APP_BG = "#F8F9FA"; // アプリ背景色 ── インジケーターの色と一致させる
+const APP_BG = BG; // アプリ背景色 ── インジケーターの色と一致させる
 
 const { width: SCREEN_W } = Dimensions.get("window");
 const BAR_MARGIN = 24;
@@ -26,9 +25,16 @@ const BAR_H = 64;
 const CIRCLE_BG = 58; // APP_BG 色の外円
 const INNER_C = 48;   // 白 + PRIMARY ボーダーの内円
 
-const TAB_ICONS: Record<string, string> = {
-  Home: "⌂",
-  Tasks: "☰",
+type IoniconName = React.ComponentProps<typeof Ionicons>["name"];
+
+const TAB_ICONS_INACTIVE: Record<string, IoniconName> = {
+  Home: "home-outline",
+  Tasks: "list-outline",
+};
+
+const TAB_ICONS_ACTIVE: Record<string, IoniconName> = {
+  Home: "home",
+  Tasks: "list",
 };
 
 export function BottomTabBar({ state, navigation }: BottomTabBarProps) {
@@ -54,7 +60,8 @@ export function BottomTabBar({ state, navigation }: BottomTabBarProps) {
     rootNav?.navigate("CreateTask", { roomId, role });
   }
 
-  const activeIcon = TAB_ICONS[state.routes[state.index]?.name ?? ""] ?? "○";
+  const activeRouteName = state.routes[state.index]?.name ?? "";
+  const activeIconName: IoniconName = TAB_ICONS_ACTIVE[activeRouteName] ?? "ellipse-outline";
 
   return (
     <View style={styles.wrapper}>
@@ -63,6 +70,7 @@ export function BottomTabBar({ state, navigation }: BottomTabBarProps) {
       <View style={styles.bar}>
         {state.routes.map((route, index) => {
           const isFocused = state.index === index;
+          const iconName: IoniconName = TAB_ICONS_INACTIVE[route.name] ?? "ellipse-outline";
 
           function onPress() {
             const event = navigation.emit({
@@ -83,9 +91,11 @@ export function BottomTabBar({ state, navigation }: BottomTabBarProps) {
               activeOpacity={0.7}
             >
               {/* アクティブ時はインジケーター側にアイコンを出す → ここは非表示 */}
-              <Text style={[styles.tabIcon, isFocused && styles.tabIconHidden]}>
-                {TAB_ICONS[route.name] ?? "○"}
-              </Text>
+              <Ionicons
+                name={iconName}
+                size={24}
+                color={isFocused ? "transparent" : INACTIVE}
+              />
             </TouchableOpacity>
           );
         })}
@@ -93,7 +103,7 @@ export function BottomTabBar({ state, navigation }: BottomTabBarProps) {
         {/* ＋ボタン */}
         <TouchableOpacity style={styles.plusSlot} onPress={handlePlusPress} activeOpacity={0.85}>
           <View style={styles.plusBtn}>
-            <Text style={styles.plusIcon}>+</Text>
+            <Ionicons name="add" size={28} color="#fff" />
           </View>
         </TouchableOpacity>
       </View>
@@ -105,7 +115,7 @@ export function BottomTabBar({ state, navigation }: BottomTabBarProps) {
         {/* APP_BG 色の穴エリア → 白＋ボーダーの内円 */}
         <View style={styles.hole}>
           <View style={styles.innerCircle}>
-            <Text style={styles.activeIcon}>{activeIcon}</Text>
+            <Ionicons name={activeIconName} size={24} color={PRIMARY} />
           </View>
         </View>
       </Animated.View>
@@ -147,13 +157,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: BAR_H,
   },
-  tabIcon: {
-    fontSize: 22,
-    color: INACTIVE,
-  },
-  tabIconHidden: {
-    opacity: 0,
-  },
   plusSlot: {
     flex: 1,
     alignItems: "center",
@@ -171,12 +174,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
     shadowRadius: 8,
     elevation: 6,
-  },
-  plusIcon: {
-    fontSize: 28,
-    color: "#fff",
-    lineHeight: 32,
-    fontWeight: "300",
   },
 
   // ─── インジケーター
@@ -215,10 +212,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.35,
     shadowRadius: 8,
     elevation: 10,
-  },
-
-  activeIcon: {
-    fontSize: 22,
-    color: PRIMARY,
   },
 });

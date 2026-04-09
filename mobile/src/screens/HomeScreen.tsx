@@ -10,15 +10,11 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import type { TabParamList } from "../navigation";
+import { Ionicons } from "@expo/vector-icons";
 import { clearRoomSession } from "../storage/roomStorage";
+import { PRIMARY, SECONDARY, BG, CARD, TEXT_MAIN, TEXT_SUB } from "../constants/theme";
 
 type Props = BottomTabScreenProps<TabParamList, "Home">;
-
-const PRIMARY = "#4ECDC4";
-const BG = "#F8F9FA";
-const CARD = "#FFFFFF";
-const TEXT_MAIN = "#2D3436";
-const TEXT_SUB = "#636E72";
 
 export function HomeScreen({ route, navigation }: Props) {
   const { roomId, role } = route.params;
@@ -51,8 +47,14 @@ export function HomeScreen({ route, navigation }: Props) {
         <View style={styles.card}>
           <Text style={styles.cardLabel}>あなたのロール</Text>
           <View style={styles.roleBadge}>
+            <Ionicons
+              name={role === "father" ? "clipboard-outline" : "cart-outline"}
+              size={20}
+              color={role === "father" ? PRIMARY : SECONDARY}
+              style={{ marginRight: 8 }}
+            />
             <Text style={styles.roleText}>
-              {role === "father" ? "📋 依頼する側" : "🛒 依頼される側"}
+              {role === "father" ? "依頼する側" : "依頼される側"}
             </Text>
           </View>
         </View>
@@ -99,6 +101,8 @@ const styles = StyleSheet.create({
     color: PRIMARY,
   },
   roleBadge: {
+    flexDirection: "row",
+    alignItems: "center",
     alignSelf: "flex-start",
     backgroundColor: "#F0FAFA",
     borderRadius: 10,

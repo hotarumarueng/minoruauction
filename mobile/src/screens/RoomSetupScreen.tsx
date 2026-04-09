@@ -20,17 +20,12 @@ import type { Role } from "../types";
 import { createRoom, joinRoom } from "../api/room";
 import { saveRoomSession } from "../storage/roomStorage";
 import { requestAndGetToken } from "../notifications/tokenRegistration";
+import { Ionicons } from "@expo/vector-icons";
+import { PRIMARY, SECONDARY, BG, CARD, TEXT_MAIN, TEXT_SUB } from "../constants/theme";
 
 type Props = NativeStackScreenProps<RootStackParamList, "RoomSetup">;
 
 type Tab = "create" | "join";
-
-const PRIMARY = "#4ECDC4";
-const SECONDARY = "#FF6B6B";
-const BG = "#F8F9FA";
-const CARD = "#FFFFFF";
-const TEXT_MAIN = "#2D3436";
-const TEXT_SUB = "#636E72";
 
 export function RoomSetupScreen({ navigation }: Props) {
   const [tab, setTab] = useState<Tab>("create");
@@ -168,9 +163,13 @@ export function RoomSetupScreen({ navigation }: Props) {
                     ]}
                     onPress={() => setSelectedRole(role)}
                   >
-                    <Text style={styles.roleIcon}>
-                      {role === "father" ? "📋" : "🛒"}
-                    </Text>
+                    <Ionicons
+                      name={role === "father" ? "clipboard-outline" : "cart-outline"}
+                      size={28}
+                      color={selectedRole === role
+                        ? (role === "father" ? PRIMARY : SECONDARY)
+                        : TEXT_SUB}
+                    />
                     <Text
                       style={[
                         styles.roleLabel,
@@ -357,10 +356,6 @@ const styles = StyleSheet.create({
   roleBtnAssigneeActive: {
     borderColor: SECONDARY,
     backgroundColor: "#FFF5F5",
-  },
-  roleIcon: {
-    fontSize: 28,
-    marginBottom: 8,
   },
   roleLabel: {
     fontSize: 13,

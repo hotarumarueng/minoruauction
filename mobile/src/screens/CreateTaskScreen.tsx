@@ -16,15 +16,9 @@ import { useHeaderHeight } from "@react-navigation/elements";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigation";
 import { createTask } from "../api/task";
+import { PRIMARY, BG, CARD, TEXT_MAIN, TEXT_SUB } from "../constants/theme";
 
 type Props = NativeStackScreenProps<RootStackParamList, "CreateTask">;
-
-const PRIMARY = "#4ECDC4";
-const SECONDARY = "#FF6B6B";
-const BG = "#F8F9FA";
-const CARD = "#FFFFFF";
-const TEXT_MAIN = "#2D3436";
-const TEXT_SUB = "#636E72";
 
 interface ParsedItem {
   title: string;
@@ -244,7 +238,7 @@ const styles = StyleSheet.create({
     borderTopColor: "#EEEEEE",
   },
   actionBtn: {
-    backgroundColor: SECONDARY,
+    backgroundColor: PRIMARY,
     borderRadius: 16,
     paddingVertical: 18,
     alignItems: "center",

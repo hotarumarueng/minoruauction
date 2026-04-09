@@ -5,6 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "minoru",
+    "icon": "./assets/icon.png",
     "platforms": [
       "ios",
       "android"
@@ -16,7 +17,8 @@
     "android": {
       "package": "com.toriumihotaru.minoru",
       "adaptiveIcon": {
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#F8F9FA"
       }
     },
     "extra": {

@@ -16,17 +16,13 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigation";
 import type { Task, TaskStatus } from "../types";
 import { getTasks } from "../api/task";
+import { PRIMARY, BG, CARD, TEXT_MAIN, TEXT_SUB } from "../constants/theme";
 
 type Props = {
   route: { params: { roomId: string; role: "father" | "assignee" } };
 };
 
 const POLL_INTERVAL_MS = 30_000;
-const PRIMARY = "#4ECDC4";
-const BG = "#F8F9FA";
-const CARD = "#FFFFFF";
-const TEXT_MAIN = "#2D3436";
-const TEXT_SUB = "#636E72";
 
 const STATUS_COLOR: Record<TaskStatus, string> = {
   未入札: "#9E9E9E",
@@ -157,7 +153,13 @@ export function TaskListScreen({ route }: Props) {
             </TouchableOpacity>
           )}
           ListEmptyComponent={
-            <Text style={styles.emptyText}>商品がありません</Text>
+            <View style={styles.emptyBox}>
+              <Text style={styles.emptyIcon}>🛍️</Text>
+              <Text style={styles.emptyText}>商品がありません</Text>
+              <Text style={styles.emptyHint}>
+                ＋ボタンからヤフオクの商品URLを追加しましょう
+              </Text>
+            </View>
           }
         />
       )}
@@ -198,9 +200,9 @@ const styles = StyleSheet.create({
   },
   headerTitle: { fontSize: 20, fontWeight: "700", color: TEXT_MAIN },
   reloadBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: "#F0FAFA",
     justifyContent: "center",
     alignItems: "center",
@@ -234,7 +236,10 @@ const styles = StyleSheet.create({
   url: { fontSize: 12, color: TEXT_SUB },
   arrow: { fontSize: 22, color: "#CCCCCC", marginLeft: 8 },
   centerBox: { flex: 1, justifyContent: "center", alignItems: "center" },
-  emptyText: { color: TEXT_SUB, fontSize: 16 },
+  emptyBox: { flex: 1, justifyContent: "center", alignItems: "center", paddingVertical: 48 },
+  emptyIcon: { fontSize: 48, marginBottom: 16 },
+  emptyText: { color: TEXT_MAIN, fontSize: 17, fontWeight: "600", marginBottom: 8 },
+  emptyHint: { color: TEXT_SUB, fontSize: 13, textAlign: "center", paddingHorizontal: 32 },
   errorText: { color: "#D32F2F", fontSize: 15, textAlign: "center", paddingHorizontal: 24, marginBottom: 16 },
   retryBtn: {
     backgroundColor: PRIMARY,
